@@ -2,8 +2,6 @@ using HangfireJobsKit.Abstractions;
 using HangfireJobsKit.Configuration;
 using HangfireJobsKit.Handlers;
 using HangfireJobsKit.Sample.Services;
-using Microsoft.Extensions.Logging;
-using SampleApp.Services;
 
 namespace SampleApp.Jobs;
 

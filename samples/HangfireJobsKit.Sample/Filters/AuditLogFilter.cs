@@ -5,7 +5,6 @@ using Hangfire.States;
 using Hangfire.Storage;
 using HangfireJobsKit.Abstractions;
 using HangfireJobsKit.Extensions;
-using HangfireJobsKit.Models;
 
 namespace HangfireJobsKit.SampleApp.Filters;
 

@@ -41,7 +41,12 @@ builder.Services.AddHangfireJobsKitServer(
 // Optional: Add custom filter
 builder.Services.AddHangfireJobsKitFilter<YourCustomFilter>();
 ```
+User-created filters should use ExecutionOrder values between 1 and 100:
+- 1-20: Early processing filters (authentication, context initialization)
+- 21-50: Main business logic filters
+- 51-100: Cleanup and logging filters
 
+The core HangfireJobsKit filters will always run before any custom filters.
 ### 2. Configure Middleware
 
 ```csharp

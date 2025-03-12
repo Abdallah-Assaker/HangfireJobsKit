@@ -5,6 +5,7 @@ using HangfireJobsKit.Filters.DefaultFilters;
 using HangfireJobsKit.Jobs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -92,8 +93,8 @@ public static class ServiceCollectionExtensions
         var jobConfigFilter = app.ApplicationServices.GetRequiredService<JobConfigurationFilter>();
         var hangfireJobFilter = app.ApplicationServices.GetRequiredService<HangfireJobFilter>();
         
-        GlobalJobFilters.Filters.Add(jobConfigFilter, order: -10); // Make sure it runs first
-        GlobalJobFilters.Filters.Add(hangfireJobFilter, order: 0);  // Then the main filter
+        GlobalJobFilters.Filters.Add(jobConfigFilter, order: -1000);
+        GlobalJobFilters.Filters.Add(hangfireJobFilter, order: -500);
         
         return app;
     }
@@ -107,7 +108,20 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddHangfireJobsKitFilter<TFilter>(this IServiceCollection services)
         where TFilter : class, IHangfireJobFilter
     {
-        services.AddScoped<IHangfireJobFilter, TFilter>();
+        services.AddScoped<IHangfireJobFilter, TFilter>(sp => {
+            var filter = ActivatorUtilities.CreateInstance<TFilter>(sp);
+            if (filter.ExecutionOrder < 0)
+            {
+                var logger = sp.GetRequiredService<ILogger<TFilter>>();
+                logger.LogWarning(
+                    "Filter {FilterType} has a negative ExecutionOrder value ({Order}). " +
+                    "Negative values are reserved for core HangfireJobsKit filters and may cause conflicts. " +
+                    "Consider using a positive value (1-100) for custom filters.",
+                    typeof(TFilter).Name,
+                    filter.ExecutionOrder);
+            }
+            return filter;
+        });
         return services;
     }
     

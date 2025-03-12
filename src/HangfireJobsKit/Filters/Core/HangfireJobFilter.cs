@@ -11,7 +11,7 @@ namespace HangfireJobsKit.Filters.Core;
 /// <summary>
 /// Main filter that orchestrates the execution of all custom filters
 /// </summary>
-public class HangfireJobFilter : JobFilterAttribute, IClientFilter, IServerFilter, IElectStateFilter, IApplyStateFilter
+internal class HangfireJobFilter : JobFilterAttribute, IClientFilter, IServerFilter, IElectStateFilter, IApplyStateFilter
 {
     private readonly IServiceScopeFactory _scopeFactory;
 

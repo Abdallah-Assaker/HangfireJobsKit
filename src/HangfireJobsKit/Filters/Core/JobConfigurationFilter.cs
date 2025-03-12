@@ -11,7 +11,7 @@ using HangfireJobsKit.Models;
 /// <summary>
 /// Filter that extracts job configuration attributes and applies them to the job
 /// </summary>
-public class JobConfigurationFilter : IClientFilter, IServerFilter, IElectStateFilter
+internal class JobConfigurationFilter : IClientFilter, IServerFilter, IElectStateFilter
 {
     /// <summary>
     /// Called when a background job is creating

@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 /// <summary>
 /// Job activator that leverages the DI container scope created by the filters
 /// </summary>
-public class ContextAwareJobActivator : JobActivator
+internal class ContextAwareJobActivator : JobActivator
 {
     private readonly IServiceProvider _serviceProvider;
 

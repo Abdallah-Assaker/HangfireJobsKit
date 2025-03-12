@@ -13,7 +13,7 @@ namespace HangfireJobsKit.Jobs;
 /// <summary>
 /// Manager for delayed jobs using Hangfire
 /// </summary>
-public class HangfireDelayedJobManager : IDelayedJobManager
+internal class HangfireDelayedJobManager : IDelayedJobManager
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly IBackgroundJobClient _backgroundJobManager;

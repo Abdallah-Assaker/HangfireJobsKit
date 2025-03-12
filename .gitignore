@@ -1,0 +1,32 @@
+# Build results
+bin/
+*/bin/
+obj/
+*/obj/
+
+# IDE files
+.vs/
+.idea/
+_ReSharper.Caches/
+*.user
+*.suo
+*.userprefs
+riderModule.iml
+
+# NuGet packages
+packages/
+*.nupkg
+project.lock.json
+project.assets.json
+*.nuget.props
+*.nuget.targets
+
+# Testing
+TestResults/
+[Cc]overage*/
+*.coverage
+*.coveragexml
+
+# Misc
+.DS_Store
+Thumbs.db

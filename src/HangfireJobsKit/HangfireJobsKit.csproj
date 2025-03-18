@@ -8,10 +8,10 @@
         <Authors>Abdallah Assaker</Authors>
         <Description>A structured approach to creating, managing, and processing Hangfire background jobs with dependency injection support and middleware-like filters.</Description>
         <PackageTags>hangfire;background-jobs;jobs;scheduler</PackageTags>
-        <RepositoryUrl>https://github.com/yourusername/HangfireJobsKit</RepositoryUrl>
+        <RepositoryUrl>https://github.com/Abdallah-Assaker/HangfireJobsKit</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <Version>0.1.0-alpha</Version>
+        <Version>0.1.1-alpha</Version>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <IncludeSymbols>true</IncludeSymbols>

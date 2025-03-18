@@ -29,9 +29,13 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<HangfireJobFilter>();
         
         // Register job managers
-        services.AddScoped<IJobManager, HangfireJobManager>();
-        services.AddScoped<IRecurrenceJobManager, HangfireRecurrenceJobManager>();
-        services.AddScoped<IDelayedJobManager, HangfireDelayedJobManager>();
+        services.AddScoped<HangfireJobManager>();
+        services.AddScoped<HangfireRecurrenceJobManager>();
+        services.AddScoped<HangfireDelayedJobManager>();
+        
+        services.AddScoped<IJobManager>(sp => sp.GetRequiredService<HangfireJobManager>());
+        services.AddScoped<IRecurrenceJobManager>(sp => sp.GetRequiredService<HangfireRecurrenceJobManager>());
+        services.AddScoped<IDelayedJobManager>(sp => sp.GetRequiredService<HangfireDelayedJobManager>());
         
         // Register default filters
         services.AddScoped<IHangfireJobFilter, ErrorLoggingFilter>();

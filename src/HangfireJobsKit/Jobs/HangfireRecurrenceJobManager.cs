@@ -12,7 +12,7 @@ namespace HangfireJobsKit.Jobs;
 /// <summary>
 /// Manager for recurrence jobs using Hangfire
 /// </summary>
-internal class HangfireRecurrenceJobManager : IRecurrenceJobManager
+public class HangfireRecurrenceJobManager : IRecurrenceJobManager
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly IRecurringJobManager _recurringJobManager;

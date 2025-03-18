@@ -6,7 +6,7 @@ namespace HangfireJobsKit.Jobs;
 /// <summary>
 /// Combined manager for all job types using Hangfire
 /// </summary>
-internal class HangfireJobManager : IJobManager
+public class HangfireJobManager : IJobManager
 {
     private readonly IDelayedJobManager _delayedJobManager;
     private readonly IRecurrenceJobManager _recurrenceJobManager;

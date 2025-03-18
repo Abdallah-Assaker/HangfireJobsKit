@@ -3,6 +3,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageId>Assaker.HangfireJobsKit</PackageId>
         <Title>HangfireJobsKit</Title>
         <Authors>Abdallah Assaker</Authors>
         <Description>A structured approach to creating, managing, and processing Hangfire background jobs with dependency injection support and middleware-like filters.</Description>

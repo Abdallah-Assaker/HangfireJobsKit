@@ -15,7 +15,7 @@ HangfireJobsKit is a comprehensive framework for structuring and managing backgr
 ## Installation
 
 ```bash
-dotnet add package HangfireJobsKit
+dotnet add package Assaker.HangfireJobsKit
 ```
 
 ## Quick Start

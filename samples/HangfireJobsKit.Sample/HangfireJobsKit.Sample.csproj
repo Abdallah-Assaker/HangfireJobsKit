@@ -20,7 +20,7 @@
 
     <!--Option 2: For production - reference the NuGet package -->
     <ItemGroup Condition="'$(Configuration)' == 'Release'">
-        <PackageReference Include="HangfireJobsKit" Version="0.1.0-alpha" />
+        <PackageReference Include="Assaker.HangfireJobsKit" Version="0.1.0-alpha" />
     </ItemGroup>
 
 </Project>

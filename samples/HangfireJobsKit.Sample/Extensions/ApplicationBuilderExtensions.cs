@@ -18,7 +18,7 @@ public static class ApplicationBuilderExtensions
             new JobContext(
                 correlationId: "system"
             ),
-            "0 0 * * *" // Daily at midnight
+            "*/7 * * * * *" // Daily at midnight
         );
         
         return app;

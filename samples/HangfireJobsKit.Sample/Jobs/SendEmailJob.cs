@@ -3,7 +3,7 @@ using HangfireJobsKit.Configuration;
 using HangfireJobsKit.Handlers;
 using HangfireJobsKit.Sample.Services;
 
-namespace SampleApp.Jobs;
+namespace HangfireJobsKit.Sample.Jobs;
 
 [JobConfiguration("Email Notification Job", 
     retryAttempts: 3, 
@@ -24,6 +24,10 @@ public class SendEmailJobHandler : DelayedJobHandlerBase<SendEmailJob>
     
     protected override async Task Handle(SendEmailJob job)
     {
+        var rnd = new Random().Next(1, 10);
+        if (rnd % 3 == 0)
+            throw new NotImplementedException();
+        
         await _emailService.SendEmailAsync(job.Email, job.Subject, job.Body);
     }
 }

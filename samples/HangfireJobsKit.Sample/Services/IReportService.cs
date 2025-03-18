@@ -1,4 +1,4 @@
-namespace SampleApp.Services;
+namespace HangfireJobsKit.Sample.Services;
 
 public interface IReportService
 {

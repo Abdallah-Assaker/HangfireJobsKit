@@ -1,12 +1,11 @@
 using Hangfire;
+using HangfireJobsKit.Abstractions;
 using HangfireJobsKit.Abstractions.Handlers;
 using HangfireJobsKit.Configuration;
 using HangfireJobsKit.Sample.Extensions;
 using HangfireJobsKit.Sample.Jobs;
 using HangfireJobsKit.Sample.Services;
 using HangfireJobsKit.SampleApp.Filters;
-using SampleApp.Jobs;
-using SampleApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +37,18 @@ builder.Services.AddHangfireJobsKitServer(
 builder.Services.AddHangfireJobsKitFilter<AuditLogFilter>();
 
 var app = builder.Build();
+
+// Debug what services are registered
+using (var scope = app.Services.CreateScope())
+{
+    try {
+        var service = scope.ServiceProvider.GetRequiredService<IRecurrenceJobManager>();
+        Console.WriteLine("IRecurrenceJobManager service resolved successfully: " + service.GetType().FullName);
+    }
+    catch (Exception ex) {
+        Console.WriteLine("Failed to resolve IRecurrenceJobManager: " + ex.Message);
+    }
+}
 
 // Configure middleware
 app.UseRouting();

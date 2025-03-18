@@ -1,7 +1,7 @@
 using HangfireJobsKit.Abstractions;
 using HangfireJobsKit.Models;
+using HangfireJobsKit.Sample.Jobs;
 using Microsoft.AspNetCore.Mvc;
-using SampleApp.Jobs;
 
 namespace SampleApp.Controllers;
 

@@ -1,6 +1,53 @@
-@HangfireJobsKit.Sample_HostAddress = http://localhost:5238
+@baseUrl = http://localhost:5238
 
-GET {{HangfireJobsKit.Sample_HostAddress}}/weatherforecast/
-Accept: application/json
+### Send immediate email
+POST {{baseUrl}}/api/email
+Content-Type: application/json
 
-###
+{
+  "email": "test@example.com",
+  "subject": "Test Email",
+  "body": "This is a test email that should be sent immediately.",
+  "delayed": false
+}
+
+### Send delayed email (1 minute)
+POST {{baseUrl}}/api/email
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "subject": "Test Delayed Email",
+  "body": "This is a test email that should be sent after a 1-minute delay.",
+  "delayed": true
+}
+
+### Send email with custom headers
+POST {{baseUrl}}/api/email
+Content-Type: application/json
+
+{
+  "email": "important@example.com",
+  "subject": "High Priority - Action Required",
+  "body": "This is an urgent email requiring immediate attention.",
+  "delayed": false
+}
+
+### Test with missing fields
+POST {{baseUrl}}/api/email
+Content-Type: application/json
+
+{
+  "email": "test@example.com"
+}
+
+### Send email to multiple recipients
+POST {{baseUrl}}/api/email
+Content-Type: application/json
+
+{
+  "email": "recipient1@example.com,recipient2@example.com",
+  "subject": "Group Notification",
+  "body": "This is a test email sent to multiple recipients.",
+  "delayed": false
+}

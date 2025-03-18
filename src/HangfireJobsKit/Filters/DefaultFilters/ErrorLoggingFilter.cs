@@ -82,14 +82,12 @@ public class ErrorLoggingFilter : IHangfireJobFilter
 
         var job = context.BackgroundJob.Job;
         var jobContextData = context.GetJobContext();
-        
+
         _logger.LogError(context.Exception,
-            "Job {JobType} execution failed. Correlation: {CorrelationId}, Args: {Args}",
-            job.Type.GetCustomAttributes(typeof(DisplayNameAttribute), false)
-                .FirstOrDefault() is DisplayNameAttribute nameAttr
-                ? nameAttr.DisplayName
-                : job.Type.Name,
-            
+            "Job {JobType} execution failed. JobId: {JobId}, Attempt: {Attempt}, Correlation: {CorrelationId}, Args: {Args}",
+            job.Type.Name,
+            context.BackgroundJob.Id,
+            context.GetJobParameter<int?>("RetryCount") ?? 0,
             jobContextData?.CorrelationId ?? "none",
             string.Join(", ", job.Args.Where(a => a is not JobContext)));
     }

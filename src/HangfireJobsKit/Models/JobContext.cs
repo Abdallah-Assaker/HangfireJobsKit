@@ -1,14 +1,14 @@
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace HangfireJobsKit.Models;
 
 /// <summary>
 /// Holds contextual information for job execution
 /// </summary>
-[JsonSerializable(typeof(JobContext))]
+[JsonObject(MemberSerialization = MemberSerialization.OptIn)]
 public record JobContext(
-    string CorrelationId,
-    IDictionary<string, string> Headers
+    [property: JsonProperty] string CorrelationId,
+    [property: JsonProperty] IDictionary<string, string> Headers
 )
 {
     [JsonConstructor]

@@ -1,9 +1,8 @@
 using HangfireJobsKit.Abstractions;
-using HangfireJobsKit.Models;
 using HangfireJobsKit.Sample.Jobs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SampleApp.Controllers;
+namespace HangfireJobsKit.Sample.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -19,15 +18,10 @@ public class EmailController : ControllerBase
     [HttpPost]
     public IActionResult SendEmail([FromBody] EmailRequest request)
     {
-        var context = new JobContext(
-            correlationId: Guid.NewGuid().ToString()
-        );
-        
         if (request.Delayed)
         {
             _jobManager.Schedule(
                 new SendEmailJob(request.Email, request.Subject, request.Body),
-                context,
                 delayedMilliseconds: 60000 // 1 minute
             );
             
@@ -36,8 +30,7 @@ public class EmailController : ControllerBase
         else
         {
             _jobManager.Enqueue(
-                new SendEmailJob(request.Email, request.Subject, request.Body),
-                context
+                new SendEmailJob(request.Email, request.Subject, request.Body)
             );
             
             return Ok(new { status = "queued", message = "Email queued for immediate delivery" });

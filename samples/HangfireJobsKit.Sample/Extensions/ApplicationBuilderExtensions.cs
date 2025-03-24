@@ -15,10 +15,11 @@ public static class ApplicationBuilderExtensions
         jobManager.AddOrUpdateRecurring(
             "daily-report",
             new GenerateDailyReportJob(DateTime.Today),
-            new JobContext(
+            "*/7 * * * * *", 
+            context: new JobContext(
                 correlationId: "system"
-            ),
-            "*/7 * * * * *" // Daily at midnight
+            )
+            // Daily at midnight
         );
         
         return app;

@@ -7,26 +7,18 @@ namespace HangfireJobsKit.Sample.Jobs;
 
 [JobConfiguration("Daily Report Job", 
     retryAttempts: 4, 
-    queue: "default")]
+    queue: "default", logEvents: true)]
 public record GenerateDailyReportJob(DateTime ReportDate) : IRecurrenceJob;
 
-public class GenerateDailyReportJobHandler : RecurrenceJobHandlerBase<GenerateDailyReportJob>
+public class GenerateDailyReportJobHandler(IReportService reportService)
+    : RecurrenceJobHandlerBase<GenerateDailyReportJob>
 {
-    private readonly IReportService _reportService;
-    
-    public GenerateDailyReportJobHandler(
-        IReportService reportService,
-        ILogger<GenerateDailyReportJobHandler> logger) : base(logger)
-    {
-        _reportService = reportService;
-    }
-    
     protected override async Task Handle(GenerateDailyReportJob job)
     {
         var rnd = new Random().Next(1, 10);
         if (rnd % 3 == 0)
             throw new NotImplementedException();
         
-        await _reportService.GenerateReportAsync(job.ReportDate);
+        await reportService.GenerateReportAsync(job.ReportDate);
     }
 }

@@ -4,9 +4,9 @@ using System.Reflection;
 using Hangfire.Client;
 using Hangfire.Server;
 using Hangfire.States;
-using HangfireJobsKit.Abstractions;
-using HangfireJobsKit.Configuration;
-using HangfireJobsKit.Models;
+using Abstractions;
+using Configuration;
+using Models;
 
 /// <summary>
 /// Filter that extracts job configuration attributes and applies them to the job

@@ -1,9 +1,11 @@
 using System.ComponentModel;
+using System.Reflection;
 using Hangfire.Client;
 using Hangfire.Server;
 using Hangfire.States;
 using Hangfire.Storage;
 using HangfireJobsKit.Abstractions;
+using HangfireJobsKit.Configuration;
 using HangfireJobsKit.Extensions;
 using HangfireJobsKit.Models;
 using Microsoft.Extensions.Logging;
@@ -48,13 +50,17 @@ public class ErrorLoggingFilter : IHangfireJobFilter
     {
         if (context.GetJobParameter<bool>("LogEvents"))
         {
+            var jobType = context.BackgroundJob.Job.Args
+                .FirstOrDefault(arg => arg is IJob)?
+                .GetType();
+            
+            var jobName = jobType?.GetCustomAttribute<JobConfigurationAttribute>()?.DisplayName ?? jobType?.Name;
+            
             var contextData = context.GetJobContext();
+            
             _logger.LogInformation(
-                "Starting job {JobType} execution. Correlation: {CorrelationId}",
-                context.BackgroundJob.Job.Type.GetCustomAttributes(typeof(DisplayNameAttribute), false)
-                    .FirstOrDefault() is DisplayNameAttribute attr
-                    ? attr.DisplayName
-                    : context.BackgroundJob.Job.Type.Name,
+                "Starting job [{JobType}] execution. Correlation: [{CorrelationId}]",
+                jobName,
                 contextData?.CorrelationId ?? "none");
         }
     }
@@ -64,17 +70,20 @@ public class ErrorLoggingFilter : IHangfireJobFilter
     /// </summary>
     public void OnPerformed(PerformedContext context)
     {
+        var jobType = context.BackgroundJob.Job.Args
+            .FirstOrDefault(arg => arg is IJob)?
+            .GetType();
+        
+        var jobName = jobType?.GetCustomAttribute<JobConfigurationAttribute>()?.DisplayName ?? jobType?.Name;
+            
         if (context.Exception is null) 
         {
             if (context.GetJobParameter<bool>("LogEvents"))
             {
                 var contextData = context.GetJobContext();
                 _logger.LogInformation(
-                    "Completed job {JobType} execution. Correlation: {CorrelationId}",
-                    context.BackgroundJob.Job.Type.GetCustomAttributes(typeof(DisplayNameAttribute), false)
-                        .FirstOrDefault() is DisplayNameAttribute attr
-                        ? attr.DisplayName
-                        : context.BackgroundJob.Job.Type.Name,
+                    "Completed job [{JobType}] execution. Correlation: [{CorrelationId}]",
+                    jobName,
                     contextData?.CorrelationId ?? "none");
             }
             return;
@@ -84,12 +93,12 @@ public class ErrorLoggingFilter : IHangfireJobFilter
         var jobContextData = context.GetJobContext();
 
         _logger.LogError(context.Exception,
-            "Job {JobType} execution failed. JobId: {JobId}, Attempt: {Attempt}, Correlation: {CorrelationId}, Args: {Args}",
-            job.Type.Name,
+            "Job [{JobType}] execution failed. JobId: [{JobId}], Attempt: [{Attempt}], Correlation: [{CorrelationId}], Args: [{Args}]",
+            jobName,
             context.BackgroundJob.Id,
             context.GetJobParameter<int?>("RetryCount") ?? 0,
             jobContextData?.CorrelationId ?? "none",
-            string.Join(", ", job.Args.Where(a => a is not JobContext)));
+            string.Join(", ", job.Args));
     }
 
     /// <summary>

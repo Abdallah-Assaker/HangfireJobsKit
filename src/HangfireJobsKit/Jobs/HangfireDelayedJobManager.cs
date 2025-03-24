@@ -40,24 +40,23 @@ internal class HangfireDelayedJobManager : IDelayedJobManager
     /// </summary>
     /// <typeparam name="TJob">Type of job to schedule</typeparam>
     /// <param name="job">The job to schedule</param>
-    /// <param name="context">The job context</param>
     /// <param name="delayedMilliseconds">Delay in milliseconds before executing the job</param>
     /// <param name="queue">The queue to place the job in</param>
+    /// <param name="context">The job context</param>
     public void Schedule<TJob>(
         [Required] TJob job, 
-        JobContext context, 
         int delayedMilliseconds = 0, 
-        string queue = "default"
+        string? queue = default,
+        JobContext? context = default 
     ) where TJob : IDelayedJob
     {
         var configuredDisplayName = job.GetJobConfigurationDisplayName();
         var configuredQueue = job.GetJobConfigurationQueue();
         
-        // Use configured queue if the caller didn't specify one explicitly
-        if (queue == "default" && configuredQueue != "default")
-        {
-            queue = configuredQueue;
-        }
+        context ??= new JobContext(Guid.NewGuid().ToString());
+        
+        // Use the configured queue if not provided in the method call or use the default queue 
+        queue ??= configuredQueue ?? Constants.DefaultQueue;
         
         var jobId = _backgroundJobManager.Schedule(
             queue,
@@ -74,22 +73,21 @@ internal class HangfireDelayedJobManager : IDelayedJobManager
     /// </summary>
     /// <typeparam name="TJob">Type of job to enqueue</typeparam>
     /// <param name="job">The job to enqueue</param>
-    /// <param name="context">The job context</param>
     /// <param name="queue">The queue to place the job in</param>
+    /// <param name="context">The job context</param>
     public void Enqueue<TJob>(
         [Required] TJob job, 
-        JobContext context, 
-        string queue = "default"
+        string? queue = default,
+        JobContext? context = default 
     ) where TJob : IDelayedJob
     {
         var configuredDisplayName = job.GetJobConfigurationDisplayName();
         var configuredQueue = job.GetJobConfigurationQueue();
         
-        // Use configured queue if the caller didn't specify one explicitly
-        if (queue == "default" && configuredQueue != "default")
-        {
-            queue = configuredQueue;
-        }
+        context ??= new JobContext(Guid.NewGuid().ToString());
+        
+        // Use the configured queue if not provided in the method call or use the default queue 
+        queue ??= configuredQueue ?? Constants.DefaultQueue;
         
         var jobId = _backgroundJobManager.Enqueue(
             queue,

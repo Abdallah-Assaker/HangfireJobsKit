@@ -40,25 +40,22 @@ public class HangfireRecurrenceJobManager : IRecurrenceJobManager
     /// <typeparam name="TJob">Type of job to schedule</typeparam>
     /// <param name="jobId">Unique identifier for the recurring job</param>
     /// <param name="job">The job to execute on schedule</param>
-    /// <param name="context">The job context</param>
     /// <param name="cron">Cron expression defining the schedule</param>
     /// <param name="queue">The queue to place the job in</param>
-    public void AddOrUpdateRecurring<TJob>(
-        string jobId, 
-        TJob job, 
-        JobContext context,
+    /// <param name="context">The job context</param>
+    public void AddOrUpdateRecurring<TJob>(string jobId,
+        TJob job,
         string cron,
-        string queue = "default"
-    ) where TJob : IRecurrenceJob
+        string? queue = default,
+        JobContext? context = default) where TJob : IRecurrenceJob
     {
         var configuredDisplayName = job.GetJobConfigurationDisplayName();
         var configuredQueue = job.GetJobConfigurationQueue();
         
-        // Use configured queue if the caller didn't specify one explicitly
-        if (queue == "default" && configuredQueue != "default")
-        {
-            queue = configuredQueue;
-        }
+        context ??= new (Guid.NewGuid().ToString());
+        
+        // Use the configured queue if not provided in the method call or use the default queue 
+        queue ??= configuredQueue ?? Constants.DefaultQueue;
         
         _recurringJobManager.AddOrUpdate(
             jobId,
@@ -72,7 +69,7 @@ public class HangfireRecurrenceJobManager : IRecurrenceJobManager
             }
         );
         
-        _logger.LogDebug("Updated recurring job {JobId} of type {JobType} with schedule {Cron} in queue {Queue}", 
+        _logger.LogDebug("Added or Updated recurring job {JobId} of type {JobType} with schedule {Cron} in queue {Queue}", 
             jobId, typeof(TJob).Name, cron, queue);
     }
 

@@ -63,23 +63,20 @@ internal class HangfireJobFilter : JobFilterAttribute, IClientFilter, IServerFil
     /// </summary>
     public void OnPerformed(PerformedContext context)
     {
-        var scope = context.Items["HangfireScope"] as IServiceScope;
+        if (context.Items["HangfireScope"] is not IServiceScope scope) return;
+        
+        var descendingSortedHangfireJobFilters = scope
+            .ServiceProvider
+            .GetServices<IHangfireJobFilter>()?
+            .OrderByDescending(x => x.ExecutionOrder) ?? Enumerable.Empty<IHangfireJobFilter>();
 
-        if (scope != null)
+        // Execute all filters in reverse order
+        foreach (var hangfireJobFilter in descendingSortedHangfireJobFilters)
         {
-            var descendingSortedHangfireJobFilters = scope
-                .ServiceProvider
-                .GetServices<IHangfireJobFilter>()?
-                .OrderByDescending(x => x.ExecutionOrder) ?? Enumerable.Empty<IHangfireJobFilter>();
-
-            // Execute all filters in reverse order
-            foreach (var hangfireJobFilter in descendingSortedHangfireJobFilters)
-            {
-                hangfireJobFilter.OnPerformed(context);
-            }
-
-            scope.Dispose();
+            hangfireJobFilter.OnPerformed(context);
         }
+
+        scope.Dispose();
     }
     
     /// <summary>

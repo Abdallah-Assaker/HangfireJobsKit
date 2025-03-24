@@ -1,8 +1,10 @@
+using HangfireJobsKit.Models;
+
 namespace HangfireJobsKit.Extensions;
 
 using System.Reflection;
-using HangfireJobsKit.Abstractions;
-using HangfireJobsKit.Configuration;
+using Abstractions;
+using Configuration;
 
 /// <summary>
 /// Extension methods for job configuration
@@ -20,7 +22,7 @@ public static class JobConfigurationExtensions
     {
         var jobType = job.GetType();
         var jobConfig = jobType.GetCustomAttribute<JobConfigurationAttribute>();
-        return jobConfig?.Queue ?? "default";
+        return jobConfig?.Queue ?? Constants.DefaultQueue;
     }
     
     /// <summary>

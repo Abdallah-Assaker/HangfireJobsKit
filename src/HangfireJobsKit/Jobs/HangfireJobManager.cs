@@ -29,13 +29,13 @@ public class HangfireJobManager : IJobManager
     /// </summary>
     /// <typeparam name="TJob">Type of job to schedule</typeparam>
     /// <param name="job">The job to schedule</param>
-    /// <param name="context">The job context</param>
     /// <param name="delayedMilliseconds">Delay in milliseconds before executing the job</param>
     /// <param name="queue">The queue to place the job in</param>
-    public void Schedule<TJob>(TJob job, JobContext context, int delayedMilliseconds = 0, string queue = "default") 
+    /// <param name="context">The job context</param>
+    public void Schedule<TJob>(TJob job, int delayedMilliseconds = 0, string? queue = default, JobContext? context = default) 
         where TJob : IDelayedJob
     {
-        _delayedJobManager.Schedule(job, context, delayedMilliseconds, queue);
+        _delayedJobManager.Schedule(job, delayedMilliseconds, queue, context);
     }
 
     /// <summary>
@@ -43,12 +43,12 @@ public class HangfireJobManager : IJobManager
     /// </summary>
     /// <typeparam name="TJob">Type of job to enqueue</typeparam>
     /// <param name="job">The job to enqueue</param>
-    /// <param name="context">The job context</param>
     /// <param name="queue">The queue to place the job in</param>
-    public void Enqueue<TJob>(TJob job, JobContext context, string queue = "default") 
+    /// <param name="context">The job context</param>
+    public void Enqueue<TJob>(TJob job, string? queue = default, JobContext? context = default) 
         where TJob : IDelayedJob
     {
-        _delayedJobManager.Enqueue(job, context, queue);
+        _delayedJobManager.Enqueue(job, queue, context);
     }
 
     /// <summary>
@@ -57,17 +57,15 @@ public class HangfireJobManager : IJobManager
     /// <typeparam name="TJob">Type of job to schedule</typeparam>
     /// <param name="jobId">Unique identifier for the recurring job</param>
     /// <param name="job">The job to execute on schedule</param>
-    /// <param name="context">The job context</param>
     /// <param name="cron">Cron expression defining the schedule</param>
     /// <param name="queue">The queue to place the job in</param>
-    public void AddOrUpdateRecurring<TJob>(
-        string jobId, 
-        TJob job, 
-        JobContext context,
+    /// <param name="context">The job context</param>
+    public void AddOrUpdateRecurring<TJob>(string jobId,
+        TJob job,
         string cron,
-        string queue = "default"
-    ) where TJob : IRecurrenceJob
+        string? queue = default,
+        JobContext? context = null) where TJob : IRecurrenceJob
     {
-        _recurrenceJobManager.AddOrUpdateRecurring(jobId, job, context, cron, queue);
+        _recurrenceJobManager.AddOrUpdateRecurring(jobId, job, cron, queue, context);
     }
 }

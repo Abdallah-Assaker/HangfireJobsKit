@@ -36,7 +36,7 @@ public class JobConfigurationAttribute : Attribute
     /// <summary>
     /// Queue name for the job
     /// </summary>
-    public string Queue { get; }
+    public string? Queue { get; }
     
     /// <summary>
     /// Indicates whether job execution events should be logged
@@ -59,7 +59,7 @@ public class JobConfigurationAttribute : Attribute
         AttemptsExceededAction onAttemptsExceeded = AttemptsExceededAction.Fail,
         int[]? retryDelaysInSeconds = null,
         Type[]? exceptOn = null,
-        string queue = "default",
+        string? queue = "default",
         bool logEvents = false)
     {
         DisplayName = displayName;

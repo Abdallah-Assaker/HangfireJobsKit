@@ -11,7 +11,7 @@
         <RepositoryUrl>https://github.com/Abdallah-Assaker/HangfireJobsKit</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <Version>0.1.1-alpha</Version>
+        <Version>0.1.2-alpha</Version>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <IncludeSymbols>true</IncludeSymbols>
